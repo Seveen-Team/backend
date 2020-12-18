@@ -1,7 +1,12 @@
 const express = require('express');
 const router = require('./router/index');
-const app = express();
 const config = require('./config/index');
+
+//app
+const app = express();
+
+//global middlewares
+app.use(express.json());
 
 //API Endpoints
 router(app)

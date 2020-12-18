@@ -5,17 +5,18 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   email: {type: String, required: true},
   password: {type: String, required: true},
-  name: {type: String, required: true},
+  Fname: {type: String, required: true},
+  Lname: {type: String, required: true},
   username: {type: String, required: true},
 
-  ubication: {type: String, required: true},
+  location: {type: String, required: true},
   devProfile: {type: String, required: true},
-  cohort: {type: Int8Array, required: true},
+  cohort: {type: Number, required: true},
   status: {type: Boolean, required: true},
   experience: {type: String, required: true},
   salaryExpectations: {type: String, required: true},
 
-  miVacants: {
+  myVacants: {
     interested: [
       {
         type: Schema.ObjectId,
@@ -37,7 +38,6 @@ const userSchema = new Schema({
         required: true
       }
     ],
-    required: true
   },
 
   recommendations: [{
@@ -46,6 +46,6 @@ const userSchema = new Schema({
   }]
 });
 
-const model = mongoose.model('user', userSchema)
+const model = mongoose.model('user', userSchema);
 
 module.exports = model;
