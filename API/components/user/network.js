@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
+const checkUserExistence = require('../../middleware/checkUserExistance')
 const userController = require('./controller');
 const response = require('../../utils/response');
 
 //routes
-router.post('/register', registerUser);
+router.post('/register', checkUserExistence,registerUser);
 router.get('/user', list);
 
 //routes handlers

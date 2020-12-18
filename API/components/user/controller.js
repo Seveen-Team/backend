@@ -36,7 +36,6 @@ const register = (userData) => {
 const list = () => {
   return new Promise(async(resolve, reject) => {
     await User.find({}, (error, users) => {
-      console.log(users)
       return error?
       reject('[Controller ERROR]: ' + error)
       :resolve(users)
