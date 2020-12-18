@@ -2,10 +2,6 @@ const express = require('express');
 const router = require('./router/index');
 const app = express();
 
-app.use('/API', function(req, res) {
-  res.send("Hello world");
-});
-
 //API Endpoints
 router(app)
 
