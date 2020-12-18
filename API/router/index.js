@@ -3,7 +3,7 @@ const user = require('../components/user/network');
 
 const router = function (server) {
   const PATH = '/api/v1';
-  server.use(PATH + '/user', user);
+  server.use(PATH, user);
   // server.use(PATH + '/vacant', vacant);
 };
 
