@@ -2,6 +2,7 @@ const User = require('./model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+//registro de usuarios
 const register = (userData) => {
   //get user pass
   const password = userData.password;
@@ -31,7 +32,19 @@ const register = (userData) => {
   })
 };
 
+//listar usuarios
+const list = () => {
+  return new Promise(async(resolve, reject) => {
+    await User.find({}, (error, users) => {
+      console.log(users)
+      return error?
+      reject('[Controller ERROR]: ' + error)
+      :resolve(users)
+    })
+  })
+}
 
 module.exports = {
   register,
+  list
 };
