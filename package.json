@@ -9,11 +9,15 @@
     "mongoose": "^5.11.8"
   },
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.2.1"
   },
   "scripts": {
     "dev": "nodemon ./API/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint './API/*.js' --quiet --fix"
   },
   "repository": {
     "type": "git",
