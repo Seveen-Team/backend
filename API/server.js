@@ -1,11 +1,29 @@
 const express = require('express');
+const cors = require('cors');
+const compression = require('cors');
+const helmet = require('helmet');
+const router = require('./router/index');
+const config = require('./config/index');
+const MongoConnect = require('./DB/index');
 
-const app = express()
+// app
+const app = express();
 
-app.use('/', function(req, res) {
-  res.send("Hello world")
-})
+// DB
+new MongoConnect();
 
-app.listen(3000, function() {
-  console.log("server running on " + 3000)  
-})
+// global middlewares
+app.use(helmet());
+app.use(compression());
+app.use(cors());
+app.use(express.json());
+
+// API Endpoints
+router(app);
+
+// static files
+app.use('/', express.static('./API/public'));
+
+app.listen(config.app.port, () => {
+  console.log(`server running on http://localhost:${config.app.port}`);
+});
