@@ -26,7 +26,7 @@ async function userLogin (req, res, next) {
 
   await userController.login(username, password)
   .then((data) => response.success(req, res, data, 200))
-  .catch((error) => response.error(req, res, 'Internal Error', 500, error))
+  .catch((error) => response.error(req, res, 'Bad Request', 403, error))
 }
 
 async function list (req, res, next) {
