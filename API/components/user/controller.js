@@ -45,20 +45,31 @@ const login = (username, password) => {
       }
 
       //if yes compare password
-      bcrypt.compare(password, user.password, (error, result) => {
+      bcrypt.compare(password, user.password, async(error, result) => {
         //if are diferent
         if(error || !result) {
           return reject('Contraseña incorrecta, ' + error)
         }
-
         // sign token and add an expire
         let token = jwt.sign({name: user.name}, config.auth.secret, {expiresIn: '1h'});
+
+        //get vacants in its own array
+        const interested = await Vacant.find({"_id":{"$in": user["myVacants"]["interested"]}})
+        const process = await Vacant.find({"_id":{"$in": user["myVacants"]["process"]}})
+        const completed = await Vacant.find({"_id":{"$in": user["myVacants"]["completed"]}})
+
+        //add to user body response
+        user["myVacants"]["interested"] = interested
+        user["myVacants"]["proces"] = process
+        user["myVacants"]["completed"] = completed
+
+        //answer frontend
         return resolve({
           rol: 'student',
           token: token,
-          id: user._id
+          user
         })
-      })
+      }) 
     })
     .catch((error) => reject('[Controller ERROR: ] ' + error))
   })
