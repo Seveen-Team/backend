@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const router = require('./router/index');
 const config = require('./config/index');
 const MongoConnect = require('./DB/index');
@@ -9,6 +10,7 @@ new MongoConnect();
 const app = express();
 
 // global middlewares
+app.use(cors());
 app.use(express.json());
 
 // API Endpoints
