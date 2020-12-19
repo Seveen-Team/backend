@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./model');
+const Vacant = require('../vacant/model')
 const config = require('../../config/index');
 
 // registro de usuarios
@@ -76,11 +77,12 @@ const list = () => {
 
 const getOneUser = (userId) => {
   return new Promise(async(resolve, reject) => {
-    await User.findOne({_id: userId}, (error, user) => {
-      return error?
-      reject('[Controller ERROR]: ' + error)
-      :resolve(user)
-    });
+    const userInfo = await User.findOne({_id: userId})
+    const interested = await Vacant.find({"_id":{"$in": userInfo["myVacants"]["interested"]}})
+
+    userInfo["myVacants"]["interested"] = interested
+
+    resolve(userInfo)
   });
 }
 
@@ -99,7 +101,7 @@ const updateUser = (id, newData) => {
 
       let result = {
         myVacants: {
-          interested: [],
+          interested: myArray,
           process: [],
           completed: []
         },
