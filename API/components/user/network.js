@@ -11,6 +11,7 @@ router.patch('/user/:id' /* , authenticate */, update);
 router.post('/register', checkUserExistence, registerUser);
 router.post('/login', userLogin);
 router.get('/user' /* , authenticate */, list);
+router.get('/user/:id' /* , authenticate */, getOne);
 
 // routes handlers
 async function registerUser(req, res, next) {
@@ -36,11 +37,18 @@ async function list(req, res, next) {
     .catch((error) => response.error(req, res, 'Internal Error', 500, error));
 }
 
+async function getOne(req, res, next) {
+  const { id } = req.params;
+
+  await userController.getOneUser(id)
+    .then((user) => response.success(req, res, user, 200))
+    .catch((error) => response.error(req, res, 'Internal Error', 500, error));
+}
+
 async function update(req, res, next) {
   const { id } = req.params;
   const newData = req.body;
-  console.log(id)
-  console.log(newData)
+
   await userController.updateUser(id, newData)
     .then((updatedUser) => response.success(req, res, updatedUser, 200))
     .catch((error) => response.error(req, res, 'Internal Error', 500, error));

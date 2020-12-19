@@ -74,16 +74,45 @@ const list = () => {
   });
 }
 
-const updateUser = (id, newData) => {
-  return new Promise((resolve, reject) => {
-    User.findOneAndUpdate({ _id: id }, newData, { new: true }, (error, updatedUser) => {
-      console.log(updatedUser)
+const getOneUser = (userId) => {
+  return new Promise(async(resolve, reject) => {
+    await User.findOne({_id: userId}, (error, user) => {
       return error?
-      reject('[Error on controller]: ' + error)
-      :!updatedUser?
-      //if no id found
-      reject('Non-vacant found ' + error)
-      :resolve(updatedUser)
+      reject('[Controller ERROR]: ' + error)
+      :resolve(user)
+    });
+  });
+}
+
+const updateUser = (id, newData) => {
+  return new Promise( async(resolve, reject) => {
+    await User.findOne({_id: id})
+    .then( async(data) => {
+      const myArray = data.myVacants.interested
+
+      const idFound = myArray.find((element) => element == newData.myVacants.interested)
+      if(idFound) {
+        return reject("ya cuentas con esta vacante en tu lista")
+      }
+
+      myArray.push(newData.myVacants.interested)
+
+      let result = {
+        myVacants: {
+          interested: [],
+          process: [],
+          completed: []
+        },
+      }
+      await User.findOneAndUpdate({ _id: id }, result, { new: true, upsert: true }, (error, updatedUser) => {
+        // console.log(updatedUser)
+        return error?
+        reject('[Error on controller]: ' + error)
+        :!updatedUser?
+        //if no id found
+        reject('Non-vacant found ' + error)
+        :resolve(updatedUser)
+      })
     })
   })
 };
@@ -92,5 +121,6 @@ module.exports = {
   register,
   login,
   list,
-  updateUser
+  updateUser,
+  getOneUser
 };

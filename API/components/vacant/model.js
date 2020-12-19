@@ -15,13 +15,13 @@ const vacantSchema = new Schema({
   origin: String, //{ type: String, required: true },
   profile: { type: String, required: true },
 
-  usersId: [
-    {
-      type: Schema.ObjectId,
-      ref: 'user',
-      required: true,
-    },
-  ],
+  // usersId: [
+  //   {
+  //     type: Schema.ObjectId,
+  //     ref: 'user',
+  //     required: true,
+  //   },
+  // ],
 });
 
 const model = mongoose.model('vacants', vacantSchema);
