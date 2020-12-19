@@ -54,7 +54,8 @@ const login = (username, password) => {
         let token = jwt.sign({name: user.name}, config.auth.secret, {expiresIn: '1h'});
         return resolve({
           rol: 'student',
-          token: token
+          token: token,
+          id: user._id
         })
       })
     })
@@ -65,7 +66,7 @@ const login = (username, password) => {
 //listar usuarios
 const list = () => {
   return new Promise(async(resolve, reject) => {
-    await User.find({}), (error, users) => {
+    await User.find({}, (error, users) => {
       return error?
       reject('[Controller ERROR]: ' + error)
       :resolve(users)
