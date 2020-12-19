@@ -27,7 +27,21 @@ const add = (vacantData) => {
   });
 }
 
+const updateVacant = (id, newData) => {
+  return new Promise((resolve, reject) => {
+    Vacants.findOneAndUpdate({_id: id}, newData, {new: true}, (error, updatedVacant) => {
+      return error?
+      reject('[Error on controller]: ' + error)
+      :!updatedVacant?
+      //if no id found
+      reject('Non-vacant found ' + error)
+      :resolve(updatedVacant)
+    })
+  })
+}
+
 module.exports = {
   getAll,
   add,
+  updateVacant
 };
