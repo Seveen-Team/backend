@@ -1,16 +1,16 @@
-const User = require('./model');
-const config = require('../../config/index');;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('./model');
+const config = require('../../config/index');
 
-//registro de usuarios
+// registro de usuarios
 const register = (userData) => {
-  //get user pass
-  const password = userData.password;
+  // get user pass
+  const { password } = userData;
 
-  return new Promise(async(resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
 
-    //encrypt user pass
+    // encrypt user pass
     const hashedPass = await bcrypt.hashSync(password, 10, (error, hash) => {
       if(error) {
         return reject('[Controller ERROR]: ' + error)
@@ -19,18 +19,18 @@ const register = (userData) => {
     });
 
     // overwrite pass for hashedpass
-    userData.password = hashedPass
+    userData.password = hashedPass;
 
-    //build user Schema
-    let user = new User(userData)
+    // build user Schema
+    const user = new User(userData);
 
-    //save on DB
+    // save on DB
     user.save((error, newUser) => {
       return error?
       reject('[Controller ERROR: error on db save] ' + error)
       :resolve(newUser)
-    })
-  })
+    });
+  });
 };
 
 const login = (username, password) => {
@@ -65,16 +65,31 @@ const login = (username, password) => {
 //listar usuarios
 const list = () => {
   return new Promise(async(resolve, reject) => {
-    await User.find({}, (error, users) => {
+    await User.find({}), (error, users) => {
       return error?
       reject('[Controller ERROR]: ' + error)
       :resolve(users)
+    });
+  });
+}
+
+const updateUser = (id, newData) => {
+  return new Promise((resolve, reject) => {
+    User.findOneAndUpdate({ _id: id }, newData, { new: true }, (error, updatedUser) => {
+      console.log(updatedUser)
+      return error?
+      reject('[Error on controller]: ' + error)
+      :!updatedUser?
+      //if no id found
+      reject('Non-vacant found ' + error)
+      :resolve(updatedUser)
     })
   })
-}
+};
 
 module.exports = {
   register,
   login,
-  list
+  list,
+  updateUser
 };
