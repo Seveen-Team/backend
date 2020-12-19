@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./model');
 const Vacant = require('../vacant/model')
 const config = require('../../config/index');
+const { find, update } = require('./model');
 
 // registro de usuarios
 const register = (userData) => {
@@ -97,35 +98,85 @@ const getOneUser = (userId) => {
   });
 }
 
-const updateUser = (id, newData) => {
+function arrayRemove(arr, value) {
+  return arr.filter((element) => {
+    return element != value;
+  });
+}
+
+const updateUserVacants = (userId, newData) => {
   return new Promise( async(resolve, reject) => {
-    await User.findOne({_id: id})
+    // hallar user data
+    await User.findOne({_id: userId})
     .then( async(data) => {
-      const myArray = data.myVacants.interested
 
-      const idFound = myArray.find((element) => element == newData.myVacants.interested)
+      let dbArray = data.myVacants;
+      let reqValue = newData.myVacants;
+      let value;
+      let result = {};
+      let myArray;
+      let index; 
+
+      if(reqValue.interested) {
+        myArray = dbArray.interested
+        value = reqValue.interested
+        index = "interested"
+      }
+      if(reqValue.process) {
+        myArray = dbArray.process
+        value = reqValue.process
+        index = "process"
+      }
+      if(reqValue.completed) {
+        myArray = dbArray.completed
+        value = reqValue.completed
+        index = "completed"
+      }
+
+      // compare if vacant is currently in array
+      const idFound = myArray.find((element) => element == value)
+
+      //if yes, remove that vacant
       if(idFound) {
-        return reject("ya cuentas con esta vacante en tu lista")
+        const updatedData = arrayRemove(myArray, value)
+        console.log(updatedData)
+        result = {
+          myVacants: {
+            [index]: updatedData,
+          },
+        }
+
+        return await User.findOneAndUpdate({ _id: userId }, result, { new: true, upsert: true }, (error, updatedUser) => {
+          // console.log(updatedUser)
+          return error?
+          reject('[Error on controller]: ' + error)
+          :!updatedUser?
+          //if no userId found
+          reject('Non-vacant found ' + error)
+          :resolve(updatedUser)
+        })
       }
 
-      myArray.push(newData.myVacants.interested)
+      // if not, add it
+      else {
+        myArray.push(value)
+        console.log(myArray)
+        result = {
+          myVacants: {
+            [index]: myArray,
+          },
+        }
 
-      let result = {
-        myVacants: {
-          interested: myArray,
-          process: [],
-          completed: []
-        },
+        await User.findOneAndUpdate({ _id: userId }, result, { new: true, upsert: true }, (error, updatedUser) => {
+          // console.log(updatedUser)
+          return error?
+          reject('[Error on controller]: ' + error)
+          :!updatedUser?
+          //if no userId found
+          reject('Non-vacant found ' + error)
+          :resolve(updatedUser)
+        })
       }
-      await User.findOneAndUpdate({ _id: id }, result, { new: true, upsert: true }, (error, updatedUser) => {
-        // console.log(updatedUser)
-        return error?
-        reject('[Error on controller]: ' + error)
-        :!updatedUser?
-        //if no id found
-        reject('Non-vacant found ' + error)
-        :resolve(updatedUser)
-      })
     })
   })
 };
@@ -134,6 +185,6 @@ module.exports = {
   register,
   login,
   list,
-  updateUser,
+  updateUserVacants,
   getOneUser
 };

@@ -49,7 +49,7 @@ async function update(req, res, next) {
   const { id } = req.params;
   const newData = req.body;
 
-  await userController.updateUser(id, newData)
+  await userController.updateUserVacants(id, newData)
     .then((updatedUser) => response.success(req, res, updatedUser, 200))
     .catch((error) => response.error(req, res, 'Internal Error', 500, error));
 }
