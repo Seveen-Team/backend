@@ -13,6 +13,8 @@ module.exports = class MongoConnect {
       .connect(MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
       })
       .then(() => console.log('Data base is connect!!'))
       .catch((err) => console.log(err));

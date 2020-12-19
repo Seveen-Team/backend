@@ -27,7 +27,7 @@ const register = (userData) => {
     //save on DB
     user.save((error, newUser) => {
       return error?
-      reject('[Controller ERROR: error on db save] ' + newUser)
+      reject('[Controller ERROR: error on db save] ' + error)
       :resolve(newUser)
     })
   })

@@ -9,13 +9,13 @@ const vacantSchema = new Schema({
   description: { type: String, required: true },
   language: { type: String, required: true },
   salary: { type: Number, required: false },
-  experienceYear: { type: Number, required: true },
+  experienceYear: Number, //{ type: Number, required: true },
   requirements: { type: String, required: true },
   url: { type: String, required: true },
-  origin: { type: String, required: true },
+  origin: String, //{ type: String, required: true },
   profile: { type: String, required: true },
 
-  users: [
+  usersId: [
     {
       type: Schema.ObjectId,
       ref: 'user',
