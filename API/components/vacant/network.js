@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', list);
 router.post('/', create)
 router.patch('/:id', update)
+router.delete('/:id', remove)
 
 async function list (req, res, next) {
   await vacantController
@@ -24,6 +25,12 @@ async function create (req, res, next) {
 async function update (req, res, next) {
   await vacantController.updateVacant(req.params.id, req.body)
   .then((updatedVacant) => response.success(req, res, updatedVacant, 200))
+  .catch((error) => response.error(req, res, 'Internal Error', 500, error));
+}
+
+async function remove (req, res, next) {
+  await vacantController.deletedVacant(req.params.id)
+  .then((deletedVacant) => response.success(req, res, deletedVacant, 200))
   .catch((error) => response.error(req, res, 'Internal Error', 500, error));
 }
 

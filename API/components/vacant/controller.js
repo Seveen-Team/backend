@@ -40,8 +40,25 @@ const updateVacant = (id, newData) => {
   })
 }
 
+const deletedVacant = (id) => {
+  return new Promise((resolve, reject) => {
+    Vacants.findOneAndDelete({_id: id}, (error, removedVacant) => {
+      return error?
+      reject('[Error on controller]: ' + error)
+      :!removedVacant?
+      //if no id found
+      reject('Non-vacant found' + error)
+      :resolve({
+        status: 'Vacant successfully deleted',
+        id
+      })
+    })
+  })
+}
+
 module.exports = {
   getAll,
   add,
-  updateVacant
+  updateVacant,
+  deletedVacant
 };
