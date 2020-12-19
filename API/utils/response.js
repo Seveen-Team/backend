@@ -24,6 +24,7 @@ exports.success = (req, res, data, status) => {
   res.status(statusCode).send({
     error: '',
     body: result,
+    statusCode
   });
 };
 
@@ -45,5 +46,6 @@ exports.error = (req, res, data, status, details) => {
     error: result,
     details,
     body: '',
+    statusCode
   });
 };
