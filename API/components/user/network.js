@@ -9,7 +9,7 @@ const response = require('../../utils/response');
 //routes
 router.post('/register', checkUserExistence, registerUser);
 router.post('/login', userLogin)
-router.get('/user', authenticate, list);
+router.get('/user' /*, authenticate */, list);
 
 //routes handlers
 async function registerUser (req, res, next) {
