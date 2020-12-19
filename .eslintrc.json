@@ -12,6 +12,14 @@
     "no-console": "off",
     "class-methods-use-this": "off",
     "no-new": "off",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "no-async-promise-executor": "off",
+    "no-undef": "off",
+    "implicit-arrow-linebreak": "off",
+    "no-confusing-arrow": "off",
+    "prefer-promise-reject-errors": "off",
+    "function-paren-newline": "off",
+    "comma-dangle": "off",
+    "max-len": "off"
   }
 }

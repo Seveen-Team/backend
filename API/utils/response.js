@@ -2,48 +2,48 @@
 // This way we give error and responses with more consitency
 
 const statusMessage = {
-  '200': 'Valid Request',
-  '201': 'Created',
-  '400': 'Invalid Format',
-  '500': 'Internal Error'  
+  200: 'Valid Request',
+  201: 'Created',
+  400: 'Invalid Format',
+  500: 'Internal Error',
 };
 
-//handle success request
-exports.success = function (req, res, data, status) {
+// handle success request
+exports.success = (req, res, data, status) => {
   let statusCode = status;
   let result = data;
 
-  if(!status) {
+  if (!status) {
     statusCode = 200;
-  };
+  }
 
-  if(!data) {
+  if (!data) {
     result = statusMessage[statusCode];
-  };
+  }
 
   res.status(statusCode).send({
     error: '',
-    body: result
+    body: result,
   });
 };
 
-//handle success request
-exports.error = function (req, res, data, status, details) {
-  console.error('[Response Error]: ' + details)
+// handle success request
+exports.error = (req, res, data, status, details) => {
+  console.error(`[Response Error]: ${details}`);
   let statusCode = status;
   let result = data;
 
-  if(!status) {
+  if (!status) {
     statusCode = 500;
-  };
+  }
 
-  if(!data) {
+  if (!data) {
     result = statusMessage[statusCode];
-  };
+  }
 
   res.status(statusCode).send({
     error: result,
-    details: details,
-    body: ''
+    details,
+    body: '',
   });
 };

@@ -5,14 +5,14 @@ const MongoConnect = require('./DB/index');
 
 new MongoConnect();
 
-//app
+// app
 const app = express();
 
-//global middlewares
+// global middlewares
 app.use(express.json());
 
-//API Endpoints
-router(app)
+// API Endpoints
+router(app);
 
 // static files
 app.use('/', express.static('./API/public'));
